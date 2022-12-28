@@ -32,7 +32,7 @@
 # include <Hardware/SharedI2cMaster.h>
 #endif
 
-#if SUPPORT_I2C_SENSORS && SUPPORT_LIS3DH
+#if SUPPORT_LIS3DH
 # include <CommandProcessing/AccelerometerHandler.h>
 #endif
 
@@ -919,7 +919,13 @@ void Platform::Init()
 	SetPinFunction(SSPIMosiPin, SSPIMosiPinPeriphMode);
 	SetPinFunction(SSPISclkPin, SSPISclkPinPeriphMode);
 	SetPinFunction(SSPIMisoPin, SSPIMisoPinPeriphMode);
+# if SAME5x || SAMC21
 	sharedSpi = new SharedSpiDevice(SspiSercomNumber, SspiDataInPad);
+# elif RP2040
+	sharedSpi = new SharedSpiDevice(SspiSpiInstanceNumber);
+# else
+# error Unsupported processor
+# endif
 #endif
 
 #if SUPPORT_I2C_SENSORS
@@ -941,7 +947,7 @@ void Platform::Init()
 
 	InitialiseInterrupts();
 
-#if SUPPORT_I2C_SENSORS && SUPPORT_LIS3DH
+#if SUPPORT_LIS3DH
 # ifdef TOOL1LC
 	if (boardVariant != 0)
 # endif
@@ -1338,8 +1344,8 @@ void Platform::Spin()
 # endif
 
 			//moveInstance->DebugPrintCdda();
-# if SUPPORT_I2C_SENSORS && SUPPORT_LIS3DH
-			debugPrintf("LIS3DH detected: %s", AccelerometerHandler::IsPresent() ? "yes" : "no");
+# if SUPPORT_LIS3DH
+			debugPrintf("Accelerometer detected: %s", AccelerometerHandler::IsPresent() ? "yes" : "no");
 # endif
 		}
 	}
