@@ -70,7 +70,7 @@ constexpr Pin Tmc22xxUartPin = GpioPin(8);
 
 constexpr Pin StepPins[NumDrivers] = { GpioPin(9) };
 constexpr Pin DirectionPins[NumDrivers] = { GpioPin(10) };
-//constexpr Pin DriverDiagPins[NumDrivers] = { GpioPin(18) };
+//constexpr Pin DriverDiagPins[NumDrivers] = { GpioPin(NoPin) };
 
 #define ACTIVE_HIGH_STEP		1		// 1 = active high, 0 = active low
 #define ACTIVE_HIGH_DIR			1		// 1 = active high, 0 = active low
@@ -103,7 +103,7 @@ constexpr Pin CanRxPin = GpioPin(4);
 constexpr Pin ButtonPins[] = { PIN_TODO };
 
 // VIN voltage monitor
-//constexpr Pin VinMonitorPin = GpioPin(19);
+//constexpr Pin VinMonitorPin = GpioPin(NoPin);
 //constexpr float VinDividerRatio = (47.0 + 4.7)/4.7;
 //constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
 
@@ -127,8 +127,8 @@ constexpr GpioPinFunction SSPIMisoPinPeriphMode = GpioPinFunction::Spi;
 #if SUPPORT_LIS3DH
 
 #define ACCELEROMETER_USES_SPI			(1)					// 0 if the accelerometer is connected via I2C, 1 if via SPI
-constexpr Pin Lis3dhCsPin = GpioPin(1);
-constexpr Pin Lis3dhInt1Pin = GpioPin(21);
+constexpr Pin Lis3dhCsPin = GpioPin(NoPin);
+constexpr Pin Lis3dhInt1Pin = GpioPin(NoPin);
 
 #endif
 
