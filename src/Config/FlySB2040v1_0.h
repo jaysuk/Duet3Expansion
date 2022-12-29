@@ -1,8 +1,8 @@
 /*
  * FlySB2040v1_0.h
  *
- *  Created on: 24 Dec 2022
- *      Author: David
+ *  Created on: 29 Dec 2022
+ *      Author: jay_s_uk
  */
 
 #ifndef SRC_CONFIG_FLYSB2040V1_0_H_
@@ -70,7 +70,7 @@ constexpr Pin Tmc22xxUartPin = GpioPin(8);
 
 constexpr Pin StepPins[NumDrivers] = { GpioPin(9) };
 constexpr Pin DirectionPins[NumDrivers] = { GpioPin(10) };
-constexpr Pin DriverDiagPins[NumDrivers] = { GpioPin(18) };
+//constexpr Pin DriverDiagPins[NumDrivers] = { GpioPin(18) };
 
 #define ACTIVE_HIGH_STEP		1		// 1 = active high, 0 = active low
 #define ACTIVE_HIGH_DIR			1		// 1 = active high, 0 = active low
@@ -103,9 +103,9 @@ constexpr Pin CanRxPin = GpioPin(4);
 constexpr Pin ButtonPins[] = { PIN_TODO };
 
 // VIN voltage monitor
-constexpr Pin VinMonitorPin = GpioPin(19);
-constexpr float VinDividerRatio = (47.0 + 4.7)/4.7;
-constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
+//constexpr Pin VinMonitorPin = GpioPin(19);
+//constexpr float VinDividerRatio = (47.0 + 4.7)/4.7;
+//constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
 
 // Diagnostic LEDs
 constexpr Pin LedPins[] = { GpioPin(24) };
@@ -138,36 +138,36 @@ constexpr PinDescription PinTable[] =
 {
 	//	PWM					ADC				PinName
 	// Port A
-	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO0 TMC UART through 1K resistor
-	{ PwmOutput::pwm0b,	AdcInput::none,		nullptr		},	// GPIO1 TMC UART
-	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr		},	// GPIO2 ENDSTOP2
-	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO3 PROBE (BLTouch in)
+	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO0 SPI1 SCK
+	{ PwmOutput::pwm0b,	AdcInput::none,		nullptr		},	// GPIO1 SPI1 CS
+	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr		},	// GPIO2 SPI1 MISO
+	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO3 SPI1 MOSI
 	{ PwmOutput::pwm2a,	AdcInput::none,		nullptr		},	// GPIO4 CAN RX
 	{ PwmOutput::pwm2b,	AdcInput::none,		nullptr		},	// GPIO5 CAN TX
-	{ PwmOutput::pwm3a,	AdcInput::none,		"out0"	},	// GPIO6 RGB
-	{ PwmOutput::pwm3b,	AdcInput::none,		nullptr	},	// GPIO7 SERVO (BLTouch out)
-	{ PwmOutput::pwm4a,	AdcInput::none,		nullptr		},	// GPIO8 HEAT0
-	{ PwmOutput::pwm4b,	AdcInput::none,		nullptr		},	// GPIO9 accelerometer CS
-	{ PwmOutput::pwm5a,	AdcInput::none,		nullptr		},	// GPIO10 SPI SCLK
-	{ PwmOutput::pwm5b,	AdcInput::none,		nullptr		},	// GPIO11 SPI MOSI
-	{ PwmOutput::pwm6a,	AdcInput::none,		"rgbled" 	},	// GPIO12 SPI MISO
-	{ PwmOutput::pwm6b,	AdcInput::none,		"out1" },	// GPIO13 SPI MAX31856 CS
+	{ PwmOutput::pwm3a,	AdcInput::none,		"out0"		},	// GPIO6 HEAT0
+	{ PwmOutput::pwm3b,	AdcInput::none,		nullptr		},	// GPIO7 EN
+	{ PwmOutput::pwm4a,	AdcInput::none,		nullptr		},	// GPIO8 UART
+	{ PwmOutput::pwm4b,	AdcInput::none,		nullptr		},	// GPIO9 STEP
+	{ PwmOutput::pwm5a,	AdcInput::none,		nullptr		},	// GPIO10 DIR
+	{ PwmOutput::pwm5b,	AdcInput::none,		nullptr		},	// GPIO11 NOT CONNECTED
+	{ PwmOutput::pwm6a,	AdcInput::none,		"rgbled" 	},	// GPIO12 RGB
+	{ PwmOutput::pwm6b,	AdcInput::none,		"out1" 		},	// GPIO13 FAN0
 	{ PwmOutput::pwm7a,	AdcInput::none,		"out2"		},	// GPIO14 FAN1
-	{ PwmOutput::pwm7b,	AdcInput::none,		"out3"		},	// GPIO15 FAN0
-	{ PwmOutput::pwm0a,	AdcInput::none,		"io0.out"		},	// GPIO16 SPI0 MISO
-	{ PwmOutput::pwm0b,	AdcInput::none,		"io1.out"		},	// GPIO17 SPI0 AS5047D CS
-	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr 	},	// GPIO18 SPI0 SCLK
-	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO19 SPI0 MOSI
-	{ PwmOutput::pwm2a,	AdcInput::none,		nullptr		},	// GPIO20 status LED
-	{ PwmOutput::pwm2b,	AdcInput::none,		nullptr	},	// GPIO21 ENDSTOP1
-	{ PwmOutput::pwm3a,	AdcInput::none,		nullptr		},	// GPIO22 DIAG
-	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO23 DIR
-	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO24 STEP
-	{ PwmOutput::none,	AdcInput::none,		"io2.in"	},	// GPIO25 EN
+	{ PwmOutput::pwm7b,	AdcInput::none,		"out3"		},	// GPIO15 FAN2
+	{ PwmOutput::pwm0a,	AdcInput::none,		"out0.pwm"	},	// GPIO16 FAN0 PWM
+	{ PwmOutput::pwm0b,	AdcInput::none,		"out1.pwm"	},	// GPIO17 FAN1 PWM
+	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr 	},	// GPIO18 NOT CONNECTED
+	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO19 NOT CONNECTED
+	{ PwmOutput::pwm2a,	AdcInput::none,		nullptr		},	// GPIO20 ADXL INT1
+	{ PwmOutput::pwm2b,	AdcInput::none,		nullptr		},	// GPIO21 ADXL INT2
+	{ PwmOutput::pwm3a,	AdcInput::none,		nullptr		},	// GPIO22 NOT CONNECTED
+	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO23 NOT CONNECTED
+	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO24 STATUS LED
+	{ PwmOutput::none,	AdcInput::none,		"io2.in"	},	// GPIO25 ENDSTOP2
 	{ PwmOutput::pwm5a,	AdcInput::adc0_0,	"temp0"		},	// GPIO26 T0_TEMP
 	{ PwmOutput::pwm5b,	AdcInput::adc0_1,	"temp1"		},	// GPIO27 CHAMBER_TEMP
-	{ PwmOutput::pwm6a,	AdcInput::adc0_2,	"io0.in"	},	// GPIO28 VIN ADC
-	{ PwmOutput::none,	AdcInput::adc0_3,	"io1.in"	},	// GPIO29 ACC_INT1
+	{ PwmOutput::pwm6a,	AdcInput::adc0_2,	"io0.in"	},	// GPIO28 ENDSTOP0
+	{ PwmOutput::none,	AdcInput::adc0_3,	"io1.in"	},	// GPIO29 ENDSTOP1
 };
 
 static constexpr size_t NumPins = ARRAY_SIZE(PinTable);
