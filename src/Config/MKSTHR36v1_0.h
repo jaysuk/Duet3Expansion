@@ -102,10 +102,14 @@ constexpr Pin CanRxPin = GpioPin(8);
 
 constexpr Pin ButtonPins[] = { PIN_TODO };
 
+#if HAS_VOLTAGE_MONITOR
+
 // VIN voltage monitor
-//constexpr Pin VinMonitorPin = GpioPin(19);
-//constexpr float VinDividerRatio = (47.0 + 4.7)/4.7;
-//constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
+constexpr Pin VinMonitorPin = { PIN_TODO };
+constexpr float VinDividerRatio = (47.0 + 4.7)/4.7;
+constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
+
+#endif
 
 // Diagnostic LEDs
 constexpr Pin LedPins[] = { PIN_TODO };
@@ -149,7 +153,7 @@ constexpr PinDescription PinTable[] =
 	{ PwmOutput::pwm4a,	AdcInput::none,		nullptr		},	// GPIO8 CAN RX
 	{ PwmOutput::pwm4b,	AdcInput::none,		nullptr		},	// GPIO9 CAN TX
 	{ PwmOutput::pwm5a,	AdcInput::none,		nullptr		},	// GPIO10 EN
-	{ PwmOutput::pwm5b,	AdcInput::none,		nullptr		},	// GPIO11 BLTouch Servo
+	{ PwmOutput::pwm5b,	AdcInput::none,		"io0.out"	},	// GPIO11 BLTouch Servo
 	{ PwmOutput::pwm6a,	AdcInput::none,		nullptr 	},	// GPIO12 SPI1 MISO ADXL345
 	{ PwmOutput::pwm6b,	AdcInput::none,		nullptr 	},	// GPIO13 SPI1 CS ADXL345
 	{ PwmOutput::pwm7a,	AdcInput::none,		nullptr		},	// GPIO14 SPI1 SCK ADXL345
