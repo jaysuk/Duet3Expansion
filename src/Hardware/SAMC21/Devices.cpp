@@ -17,7 +17,7 @@
 constexpr size_t AnalogInTaskStackWords = 200;				// was 120 but we got a stack overflow
 static Task<AnalogInTaskStackWords> analogInTask;
 
-# ifdef SAMMYC21
+# if defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)
 
 void SerialPortInit(AsyncSerial*) noexcept
 {

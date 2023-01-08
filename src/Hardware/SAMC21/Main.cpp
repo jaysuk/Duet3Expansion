@@ -17,7 +17,7 @@ void AppInit() noexcept
 // Return the XOSC frequency in MHz
 unsigned int AppGetXoscFrequency() noexcept
 {
-#ifdef SAMMYC21
+#if defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)
 	return 16;
 #else
 	return 0;			// auto detect 12 or 25MHz

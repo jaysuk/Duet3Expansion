@@ -23,6 +23,8 @@
 # include "EXP1HCLv1_0.h"
 #elif defined(SAMMYC21)
 # include "SAMMYC21.h"
+#elif defined(CANNED_ERCF_SAMMYC21)
+# include "CANNED_ERCF_SAMMYC21.h"
 #elif defined(ATECM)
 # include "ATECM.h"
 #elif defined(ATEIO)
