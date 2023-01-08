@@ -20,7 +20,7 @@ Move *moveInstance;
 
 void debugPrintf(const char* fmt, ...)
 {
-#if defined(SAMMYC21) || defined(DEBUG)				// save on stack usage by not calling vuprintf if debugging is disabled
+#if defined(SAMMYC21) || defined(DEBUG) || defined(CANNED_ERCF_SAMMYC21)				// save on stack usage by not calling vuprintf if debugging is disabled
 	va_list vargs;
 	va_start(vargs, fmt);
 	vuprintf(Platform::DebugPutc, fmt, vargs);

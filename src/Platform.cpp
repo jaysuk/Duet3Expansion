@@ -493,7 +493,7 @@ namespace Platform
 		return (switches == 0) ? CanId::ExpansionBoardFirmwareUpdateAddress : switches;
 #elif defined(TOOL1LC)
 		return CanId::ToolBoardDefaultAddress;
-#elif defined(SAMMYC21)
+#elif defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)
 		return CanId::SammyC21DefaultAddress;
 #elif defined(EXP1XD)
 		return CanId::Exp1XDBoardDefaultAddress;
@@ -642,7 +642,7 @@ void Platform::Init()
 		}
 	}
 
-#if defined(SAMMYC21)
+#if defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)
 	uart0.begin(115200);						// set up the UART with the same baud rate as the bootloader
 #elif defined(DEBUG)
 	// Set up the UART to send to PanelDue for debugging
@@ -1193,7 +1193,7 @@ void Platform::Spin()
 #endif
 		}
 
-#ifdef SAMMYC21
+#if defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)
 		//debugPrintf("IR=%" PRIx32 " ERR=%" PRIx32 " RXF0S=%" PRIx32 " RXF1S=%" PRIx32 " PSR=%" PRIx32 " CCCR=%" PRIx32 "\n",
 		//	CAN0->IR.reg, CAN0->ECR.reg, CAN0->RXF0S.reg, CAN0->RXF1S.reg, CAN0->PSR.reg, CAN0->CCCR.reg);
 
@@ -1318,7 +1318,7 @@ void Platform::HandleHeaterFault(unsigned int heater)
 // Output a character to the debug channel
 bool Platform::DebugPutc(char c)
 {
-#if defined(SAMMYC21) || defined(DEBUG)
+#if defined(SAMMYC21) || defined(DEBUG) || defined(CANNED_ERCF_SAMMYC21)
 	if (c != 0)
 	{
 		uart0.write(c);
