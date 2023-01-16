@@ -164,8 +164,8 @@ constexpr PinDescription PinTable[] =
 	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO23 NOT CONNECTED
 	{ PwmOutput::none,	AdcInput::none,		nullptr		},	// GPIO24 STATUS LED
 	{ PwmOutput::none,	AdcInput::none,		"io2.in"	},	// GPIO25 ENDSTOP2
-	{ PwmOutput::pwm5a,	AdcInput::adc0_0,	"temp0"		},	// GPIO26 T0_TEMP
-	{ PwmOutput::pwm5b,	AdcInput::adc0_1,	"temp1"		},	// GPIO27 CHAMBER_TEMP
+	{ PwmOutput::pwm5a,	AdcInput::adc0_0,	"temp1"		},	// GPIO26 CHAMBER_TEMP
+	{ PwmOutput::pwm5b,	AdcInput::adc0_1,	"temp0"		},	// GPIO27 T0_TEMP
 	{ PwmOutput::pwm6a,	AdcInput::adc0_2,	"io0.in"	},	// GPIO28 ENDSTOP0
 	{ PwmOutput::none,	AdcInput::adc0_3,	"io1.in"	},	// GPIO29 ENDSTOP1
 };
