@@ -1,17 +1,17 @@
 /*
- * MKSTHR36v1_0.h
+ * MKSTHR3642v1_0.h
  *
  *  Created on: 29 Dec 2022
  *      Author: jay_s_uk
  */
 
-#ifndef SRC_CONFIG_MKSTHR36V1_0_H_
-#define SRC_CONFIG_MKSTHR36V1_0_H_
+#ifndef SRC_CONFIG_MKSTHR3642V1_0_H_
+#define SRC_CONFIG_MKSTHR3642V1_0_H_
 
 #include <Hardware/PinDescription.h>
 
-#define BOARD_TYPE_NAME		"MKSTHR36v1_0"
-#define BOOTLOADER_NAME		"MKSTHR36v1_0"
+#define BOARD_TYPE_NAME		"MKSTHR3642v1_0"
+#define BOOTLOADER_NAME		"MKSTHR3642v1_0"
 
 // General features
 #define HAS_VREF_MONITOR		0
@@ -209,4 +209,4 @@ const NvicPriority NvicPriorityDmac = 3;				// priority for DMA complete interru
 const NvicPriority NvicPriorityAdc = 3;
 const NvicPriority NvicPriorityUSB = 3;
 
-#endif /* SRC_CONFIG_MKSTHR36V1_0_H_ */
+#endif /* SRC_CONFIG_MKSTHR3642v1_0_H_ */
