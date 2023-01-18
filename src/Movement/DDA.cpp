@@ -409,10 +409,6 @@ void DDA::Start(uint32_t tim) noexcept
 		}
 	}
 #endif
-
-#if SUPPORT_CLOSED_LOOP
-	ClosedLoop::StartingMove();
-#endif
 }
 
 #if USE_TC_FOR_STEP
@@ -453,7 +449,7 @@ void DDA::StepDrivers(uint32_t now) noexcept
 			}
 			StepGenTc->CTRLBSET.reg = TC_CTRLBSET_CMD_RETRIGGER;
 			lastStepHighTime = StepTimer::GetTimerTicks();
-			ddms[0].CalcNextStepTime(*this);
+			(void)ddms[0].CalcNextStepTime(*this);
 #  else
 			uint32_t lastStepPulseTime = lastStepLowTime;
 			while (now - lastStepPulseTime < Platform::GetSlowDriverStepLowClocks() || now - lastDirChangeTime < Platform::GetSlowDriverDirSetupClocks())
@@ -462,7 +458,7 @@ void DDA::StepDrivers(uint32_t now) noexcept
 			}
 			Platform::StepDriverHigh();									// generate the step
 			lastStepPulseTime = StepTimer::GetTimerTicks();
-			hasMoreSteps = ddms[0].CalcNextStepTime(*this);
+			(void)ddms[0].CalcNextStepTime(*this);
 
 			// 3a. Reset the step pin low
 			while (StepTimer::GetTimerTicks() - lastStepPulseTime < Platform::GetSlowDriverStepHighClocks()) {}
@@ -475,10 +471,10 @@ void DDA::StepDrivers(uint32_t now) noexcept
 		{
 # if USE_TC_FOR_STEP
 			StepGenTc->CTRLBSET.reg = TC_CTRLBSET_CMD_RETRIGGER;
-			ddms[0].CalcNextStepTime(*this);
+			(void)ddms[0].CalcNextStepTime(*this);
 # else
 			Platform::StepDriverHigh();									// generate the step
-			ddms[0].CalcNextStepTime(*this);
+			(void)ddms[0].CalcNextStepTime(*this);
 			Platform::StepDriverLow();									// set the step pin low
 # endif
 		}
