@@ -33,6 +33,8 @@
 # include "Fly36_RRF.h"
 #elif defined(FLYSB2040v1_0)
 # include "FlySB2040v1_0.h"
+#elif defined(FLYEASYERCFBRDV1_1)
+# include "FlyEasyERCFbrdv1_1.h"
 #elif defined(MKSTHR3642v1_0)
 # include "MKSTHR3642v1_0.h"
 #elif defined(M23CL)

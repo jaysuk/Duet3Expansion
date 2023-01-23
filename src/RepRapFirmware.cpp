@@ -20,7 +20,7 @@ Move *moveInstance;
 
 void debugPrintf(const char* fmt, ...) noexcept
 {
-#if defined(DEBUG) || defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21) || defined(RPI_PICO) || defined(FLY36RRF) || defined(FLYSB2040v1_0) || defined(MKSTHR3642v1_0)	// save on stack usage by not calling vuprintf if debugging is disabled
+#if defined(DEBUG) || defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21) || defined(RPI_PICO) || defined(FLY36RRF) || defined(FLYSB2040v1_0) || defined(MKSTHR3642v1_0) || defined(FLYEASYERCFBRDV1_1)	// save on stack usage by not calling vuprintf if debugging is disabled
 	va_list vargs;
 	va_start(vargs, fmt);
 	vuprintf(Platform::DebugPutc, fmt, vargs);
