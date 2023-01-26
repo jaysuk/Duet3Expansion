@@ -1,7 +1,7 @@
 /*
  * FlyEasyERCFbrdv1_1.h
  *
- *  Created on: 29 Dec 2022
+ *  Created on: 26 Jan 2023
  *      Author: jay_s_uk
  */
 
@@ -110,7 +110,7 @@ constexpr Pin ButtonPins[] = { PIN_TODO };
 //constexpr float VinMonitorVoltageRange = VinDividerRatio * 3.3;				// the Pico uses the 3.3V supply as the voltage reference
 
 // Diagnostic LEDs
-constexpr Pin LedPins[] = { PIN_TODO };
+constexpr Pin LedPins[] = { GpioPin(17) };
 constexpr bool LedActiveHigh = false;
 
 #if SUPPORT_SPI_SENSORS
@@ -140,7 +140,7 @@ constexpr PinDescription PinTable[] =
 {
 	//	PWM					ADC				PinName
 	// Port A
-	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO0 Selector UART
+	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO0 Selector UART/CS
 	{ PwmOutput::pwm0b,	AdcInput::none,		nullptr		},	// GPIO1 Selector DIR
 	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr		},	// GPIO2 Selector Step
 	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO3 Selector Enable
@@ -149,17 +149,17 @@ constexpr PinDescription PinTable[] =
 	{ PwmOutput::pwm3a,	AdcInput::none,		nullptr		},	// GPIO6 Gear Enable
 	{ PwmOutput::pwm3b,	AdcInput::none,		nullptr		},	// GPIO7 Gear Step
 	{ PwmOutput::pwm4a,	AdcInput::none,		nullptr		},	// GPIO8 Gear DIR
-	{ PwmOutput::pwm4b,	AdcInput::none,		nullptr		},	// GPIO9 Gear UART
-	{ PwmOutput::pwm5a,	AdcInput::none,		"GPIO10"	},	// GPIO10 On expansion header
-	{ PwmOutput::pwm5b,	AdcInput::none,		"GPIO11"	},	// GPIO11 On expansion header
-	{ PwmOutput::pwm6a,	AdcInput::none,		"GPIO12" 	},	// GPIO12 On expansion header
-	{ PwmOutput::pwm6b,	AdcInput::none,		"GPIO13" 	},	// GPIO13 On expansion header
+	{ PwmOutput::pwm4b,	AdcInput::none,		nullptr		},	// GPIO9 Gear UART/CS
+	{ PwmOutput::pwm5a,	AdcInput::none,		"GPIO10"	},	// GPIO10 On expansion header SPI1 SCK
+	{ PwmOutput::pwm5b,	AdcInput::none,		"GPIO11"	},	// GPIO11 On expansion header SPI1 TX
+	{ PwmOutput::pwm6a,	AdcInput::none,		"GPIO12" 	},	// GPIO12 On expansion header SPI1 RX
+	{ PwmOutput::pwm6b,	AdcInput::none,		"GPIO13" 	},	// GPIO13 On expansion header SPI1 CS
 	{ PwmOutput::pwm7a,	AdcInput::none,		"io2.in"	},	// GPIO14 called "spare" or "extra"
 	{ PwmOutput::pwm7b,	AdcInput::none,		"io1.in"	},	// GPIO15 Encoder
-	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO16 NOT CONNECTED
-	{ PwmOutput::pwm0b,	AdcInput::none,		nullptr		},	// GPIO17 NOT CONNECTED
-	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr 	},	// GPIO18 NOT CONNECTED
-	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO19 NOT CONNECTED
+	{ PwmOutput::pwm0a,	AdcInput::none,		nullptr		},	// GPIO16 Motor MISO
+	{ PwmOutput::pwm0b,	AdcInput::none,		nullptr		},	// GPIO17 Status LED
+	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr 	},	// GPIO18 Motor MOSI
+	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO19 Motor SCK
 	{ PwmOutput::pwm2a,	AdcInput::none,		"io0.in"	},	// GPIO20 Endstop
 	{ PwmOutput::pwm2b,	AdcInput::none,		"io0.out"	},	// GPIO21 Servo
 	{ PwmOutput::pwm3a,	AdcInput::none,		nullptr		},	// GPIO22 Selector DIAG
