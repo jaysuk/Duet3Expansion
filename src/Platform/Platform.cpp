@@ -1479,7 +1479,7 @@ bool Platform::DebugPutc(char c) noexcept
 {
 	if (c != 0)
 	{
-#if defined(RPI_PICO) || defined(FLY36RRF)
+#if defined(RPI_PICO) || defined(FLY36RRF) || defined(FLYSB2040v1_0) || defined(MKSTHR3642v1_0) || defined(FLYEASYERCFBRDV1_1)
 		serialUSB.write(c);
 #else
 		uart0.write(c);
