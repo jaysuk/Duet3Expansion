@@ -15,6 +15,7 @@
 #include <CanMessageGenericTables.h>
 #include <InputMonitors/InputMonitor.h>
 #include <GPIO/GpioPorts.h>
+#include <LedStrips/LedStrips.h>
 #include <Platform/Platform.h>
 #include <Movement/Move.h>
 #include <Platform/Tasks.h>
@@ -821,7 +822,7 @@ static GCodeResult GetInfo(const CanMessageReturnInfo& msg, const StringRef& rep
 # endif
 				, driver, moveInstance->GetPosition(driver), (double)Platform::DriveStepsPerUnit(driver));
 # if HAS_SMART_DRIVERS
-			const StandardDriverStatus status = SmartDrivers::GetStatus(driver);
+			const StandardDriverStatus status = SmartDrivers::GetStatus(driver, false, false);
 			status.AppendText(reply, 0);
 			if (!status.notPresent)
 			{
@@ -976,6 +977,17 @@ void CommandProcessor::Spin()
 		case CanMessageType::writeGpio:
 			requestId = buf->msg.writeGpio.requestId;
 			rslt = GpioPorts::HandleGpioWrite(buf->msg.writeGpio, replyRef);
+			break;
+
+		// LED strip commands
+		case CanMessageType::m950Led:
+			requestId = buf->msg.generic.requestId;
+			rslt = LedStrips::HandleM950Led(buf->msg.generic, replyRef, extra);
+			break;
+
+		case CanMessageType::writeLedStrip:
+			requestId = buf->msg.generic.requestId;
+			rslt = LedStrips::HandleLedSetColours(buf->msg.generic, replyRef);
 			break;
 
 #if SUPPORT_DRIVERS

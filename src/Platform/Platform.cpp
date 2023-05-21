@@ -1472,22 +1472,23 @@ uint32_t Platform::GetHeatTaskIdleTicks()
 	return heatTaskIdleTicks;
 }
 
+#if USE_SERIAL_DEBUG
+
 // Output a character to the debug channel
-bool Platform::DebugPutc(char c)
+bool Platform::DebugPutc(char c) noexcept
 {
-#if defined(RPI_PICO) || defined(FLY36RRF) || defined(FLYSB2040v1_0) || defined(MKSTHR3642v1_0) || defined(FLYEASYERCFBRDV1_1)
 	if (c != 0)
 	{
+#if defined(RPI_PICO) || defined(FLY36RRF)
 		serialUSB.write(c);
-	}
-#elif defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21) || defined(DEBUG)
-	if (c != 0)
-	{
+#else
 		uart0.write(c);
-	}
 #endif
+	}
 	return true;
 }
+
+#endif
 
 void Platform::LogError(ErrorCode e)
 {
@@ -2098,7 +2099,7 @@ void Platform::SendDriversStatus(CanMessageBuffer& buf)
 	msg->SetStandardFields(MaxSmartDrivers);
 	for (size_t driver = 0; driver < MaxSmartDrivers; ++driver)
 	{
-		msg->data[driver] = SmartDrivers::GetStatus(driver).AsU32();
+		msg->data[driver] = SmartDrivers::GetStatus(driver, false, false).AsU32();
 	}
 # else
 	msg->SetStandardFields(NumDrivers);
