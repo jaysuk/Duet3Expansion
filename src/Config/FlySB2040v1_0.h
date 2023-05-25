@@ -154,8 +154,8 @@ constexpr PinDescription PinTable[] =
 	{ PwmOutput::pwm6b,	AdcInput::none,		"out1" 		},	// GPIO13 FAN0
 	{ PwmOutput::pwm7a,	AdcInput::none,		"out2"		},	// GPIO14 FAN1
 	{ PwmOutput::pwm7b,	AdcInput::none,		"out3"		},	// GPIO15 FAN2
-	{ PwmOutput::pwm0a,	AdcInput::none,		"out0.pwm"	},	// GPIO16 FAN0 PWM
-	{ PwmOutput::pwm0b,	AdcInput::none,		"out1.pwm"	},	// GPIO17 FAN1 PWM
+	{ PwmOutput::pwm0a,	AdcInput::none,		"out1.pwm"	},	// GPIO16 FAN0 PWM
+	{ PwmOutput::pwm0b,	AdcInput::none,		"out2.pwm"	},	// GPIO17 FAN1 PWM
 	{ PwmOutput::pwm1a,	AdcInput::none,		nullptr 	},	// GPIO18 NOT CONNECTED
 	{ PwmOutput::pwm1b,	AdcInput::none,		nullptr		},	// GPIO19 NOT CONNECTED
 	{ PwmOutput::pwm2a,	AdcInput::none,		nullptr		},	// GPIO20 ADXL INT1
