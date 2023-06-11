@@ -713,7 +713,7 @@ void Platform::Init()
 		}
 	}
 
-#if defined(SAMMYC21) && USE_SERIAL_DEBUG
+#if (defined(SAMMYC21) || defined(CANNED_ERCF_SAMMYC21)) && USE_SERIAL_DEBUG
 	uart0.begin(115200);						// set up the UART with the same baud rate as the bootloader
 #elif defined(RPI_PICO) || defined(FLY36RRF) || defined(FLYSB2040v1_0) || defined(MKSTHR3642v1_0) || defined(FLYEASYERCFBRDV1_1)
 	serialUSB.Start(NoPin);
