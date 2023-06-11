@@ -37,7 +37,11 @@ constexpr uint32_t CanUserAreaDataOffset = 512 - sizeof(CanUserAreaData);
 constexpr uint32_t CanUserAreaDataOffset = 256 - sizeof(CanUserAreaData);
 #endif
 
+#if SAMC21
+constexpr unsigned int NumCanBuffers = 20;		// SAMC21-based boards have at most one driver, so allocate fewer message buffers to save RAM
+#else
 constexpr unsigned int NumCanBuffers = 40;
+#endif
 
 static CanDevice *can0dev = nullptr;
 static CanUserAreaData canConfigData;
@@ -57,7 +61,7 @@ constexpr CanDevice::Config Can0Config =
 {
 	.dataSize = 64,									// must be one of: 8, 12, 16, 20, 24, 32, 48, 64
 	.numTxBuffers = 0,
-	.txFifoSize = 10,								// enough to send a 512-byte response broken into 60-byte fragments
+	.txFifoSize = 16,								// enough to send a 512-byte response broken into 60-byte fragments, plus status messages
 #if RP2040
 	.numRxBuffers = 0,								// RP2040 implementation doesn't support receive buffers
 #else

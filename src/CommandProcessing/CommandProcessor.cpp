@@ -15,7 +15,7 @@
 #include <CanMessageGenericTables.h>
 #include <InputMonitors/InputMonitor.h>
 #include <GPIO/GpioPorts.h>
-#include <LedStrips/LedStrips.h>
+#include <LedStrips/LedStripManager.h>
 #include <Platform/Platform.h>
 #include <Movement/Move.h>
 #include <Platform/Tasks.h>
@@ -348,7 +348,10 @@ static GCodeResult ProcessM569(const CanMessageGeneric& msg, const StringRef& re
 			seen = true;
 # if SUPPORT_CLOSED_LOOP
 			// Enable/disabled closed loop control
-			if (!ClosedLoop::SetClosedLoopEnabled(drive, val == (uint32_t)DriverMode::direct, reply))
+			const ClosedLoopMode mode = (val == (uint32_t)DriverMode::direct) ? ClosedLoopMode::closed
+										: (val == (uint32_t)DriverMode::direct + 1) ? ClosedLoopMode::assistedOpen
+											: ClosedLoopMode::open;
+			if (!closedLoopInstance->SetClosedLoopEnabled(mode, reply))
 			{
 				// reply.printf is done in ClosedLoop::SetClosedLoopEnabled()
 				return GCodeResult::error;
@@ -360,9 +363,9 @@ static GCodeResult ProcessM569(const CanMessageGeneric& msg, const StringRef& re
 				return GCodeResult::error;
 			}
 # if SUPPORT_CLOSED_LOOP
-			if (val == (uint32_t) DriverMode::direct)
+			if (mode != ClosedLoopMode::open)
 			{
-				ClosedLoop::DriverSwitchedToClosedLoop(drive);
+				closedLoopInstance->DriverSwitchedToClosedLoop();
 			}
 # endif
 		}
@@ -470,12 +473,19 @@ static GCodeResult ProcessM569(const CanMessageGeneric& msg, const StringRef& re
 
 #if HAS_SMART_DRIVERS
 		// It's a smart driver, so print the parameters common to all modes, except for the position
-		reply.catf(", mode %s, ccr 0x%05" PRIx32 ", toff %" PRIu32 ", tblank %" PRIu32,
-				TranslateDriverMode(SmartDrivers::GetDriverMode(drive)),
-				SmartDrivers::GetRegister(drive, SmartDriverRegister::chopperControl),
-				SmartDrivers::GetRegister(drive, SmartDriverRegister::toff),
-				SmartDrivers::GetRegister(drive, SmartDriverRegister::tblank)
-			);
+		const DriverMode dmode = SmartDrivers::GetDriverMode(drive);
+		reply.catf(", mode %s", TranslateDriverMode(dmode));
+# if SUPPORT_CLOSED_LOOP
+		if (dmode == DriverMode::direct)
+		{
+			reply.catf(" (%s)", closedLoopInstance->GetModeText());
+		}
+# endif
+		reply.catf(", ccr 0x%05" PRIx32 ", toff %" PRIu32 ", tblank %" PRIu32,
+					SmartDrivers::GetRegister(drive, SmartDriverRegister::chopperControl),
+					SmartDrivers::GetRegister(drive, SmartDriverRegister::toff),
+					SmartDrivers::GetRegister(drive, SmartDriverRegister::tblank)
+				  );
 
 # if SUPPORT_TMC51xx || SUPPORT_TMC2160
 		{
@@ -811,14 +821,11 @@ static GCodeResult GetInfo(const CanMessageReturnInfo& msg, const StringRef& rep
 	case CanMessageReturnInfo::typeDiagnosticsPart0 + 4:
 		extra = LastDiagnosticsPart;
 #if SUPPORT_DRIVERS
-# if SUPPORT_CLOSED_LOOP
-		ClosedLoop::Diagnostics(reply);
-# endif
 		for (size_t driver = 0; driver < NumDrivers; ++driver)
 		{
 			reply.lcatf("Driver %u: pos %" PRIi32 ", %.1f steps/mm"
 # if HAS_SMART_DRIVERS
-				","
+				", "
 # endif
 				, driver, moveInstance->GetPosition(driver), (double)Platform::DriveStepsPerUnit(driver));
 # if HAS_SMART_DRIVERS
@@ -891,6 +898,9 @@ static GCodeResult GetInfo(const CanMessageReturnInfo& msg, const StringRef& rep
 
 	case CanMessageReturnInfo::typeDiagnosticsPart0 + 7:
 		extra = LastDiagnosticsPart;
+#if SUPPORT_CLOSED_LOOP
+		closedLoopInstance->Diagnostics(reply);
+#endif
 #if SUPPORT_LIS3DH
 		AccelerometerHandler::Diagnostics(reply);
 #endif
@@ -982,12 +992,12 @@ void CommandProcessor::Spin()
 		// LED strip commands
 		case CanMessageType::m950Led:
 			requestId = buf->msg.generic.requestId;
-			rslt = LedStrips::HandleM950Led(buf->msg.generic, replyRef, extra);
+			rslt = LedStripManager::HandleM950Led(buf->msg.generic, replyRef, extra);
 			break;
 
 		case CanMessageType::writeLedStrip:
 			requestId = buf->msg.generic.requestId;
-			rslt = LedStrips::HandleLedSetColours(buf->msg.generic, replyRef);
+			rslt = LedStripManager::HandleLedSetColours(buf->msg.generic, replyRef);
 			break;
 
 #if SUPPORT_DRIVERS
@@ -1004,7 +1014,7 @@ void CommandProcessor::Spin()
 		case CanMessageType::m569p1:
 			requestId = buf->msg.generic.requestId;
 # if SUPPORT_CLOSED_LOOP
-			rslt = ClosedLoop::ProcessM569Point1(buf->msg.generic, replyRef);
+			rslt = closedLoopInstance->ProcessM569Point1(buf->msg.generic, replyRef);
 # else
 			rslt = GCodeResult::errorNotSupported;
 # endif
@@ -1018,7 +1028,7 @@ void CommandProcessor::Spin()
 		case CanMessageType::m569p6:
 			requestId = buf->msg.generic.requestId;
 # if SUPPORT_CLOSED_LOOP
-			rslt = ClosedLoop::ProcessM569Point6(buf->msg.generic, replyRef);
+			rslt = closedLoopInstance->ProcessM569Point6(buf->msg.generic, replyRef);
 # else
 			rslt = GCodeResult::errorNotSupported;
 # endif
@@ -1143,7 +1153,7 @@ void CommandProcessor::Spin()
 #if SUPPORT_CLOSED_LOOP
 		case CanMessageType::startClosedLoopDataCollection:
 			requestId = buf->msg.startClosedLoopDataCollection.requestId;
-			rslt = ClosedLoop::ProcessM569Point5(buf->msg.startClosedLoopDataCollection, replyRef);
+			rslt = closedLoopInstance->ProcessM569Point5(buf->msg.startClosedLoopDataCollection, replyRef);
 			break;
 #endif
 
