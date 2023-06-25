@@ -37,6 +37,8 @@
 # include "FlyEasyERCFbrdv1_1.h"
 #elif defined(MKSTHR3642v1_0)
 # include "MKSTHR3642v1_0.h"
+#elif defined(PITBv1_0)
+# include "PITBv1_0.h"
 #elif defined(M23CL)
 # include "M23CL.h"
 #else

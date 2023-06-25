@@ -21,8 +21,6 @@
 #define HAS_ADDRESS_SWITCHES	0
 #define HAS_BUTTONS				0
 #define USE_SERIAL_DEBUG		1
-#define SUPPORT_LED_STRIPS      1
-#define SUPPORT_PIO_NEOPIXEL    1
 
 // Drivers configuration
 #define SUPPORT_DRIVERS			1
