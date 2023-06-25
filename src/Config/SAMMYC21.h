@@ -71,6 +71,7 @@ constexpr Pin DirectionPins[NumDrivers] = { PortAPin(10) };
 #define SUPPORT_SPI_SENSORS		1
 #define SUPPORT_I2C_SENSORS		1
 #define SUPPORT_LIS3DH			1
+#define SUPPORT_LDC1612			1
 #define SUPPORT_DHT_SENSOR		0
 #define SUPPORT_SDADC			0
 
@@ -197,7 +198,8 @@ constexpr PinDescription PinTable[] =
 };
 
 static constexpr size_t NumPins = ARRAY_SIZE(PinTable);
-static_assert(NumPins == 32 + 10);		// 32 pins on port A (some missing), only PB08 and PB09 are brought out on this board
+static constexpr size_t NumRealPins = 32 + 10;			// 32 pins on port A (some missing), only PB08 and PB09 are brought out on this board
+static_assert(NumPins == NumRealPins);					// no virtual pins
 
 // Timer/counter used to generate step pulses and other sub-millisecond timings
 TcCount32 * const StepTc = &(TC2->COUNT32);
